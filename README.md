@@ -13,7 +13,7 @@ Panel webui x-ray con soporte a multi-usuarios/protocolos
 
 # instalar y actualizar
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/M1001-byte/x-ui-spanish/main/install.sh)
 ```
 
 ## Instalacion y actualizacion manual
