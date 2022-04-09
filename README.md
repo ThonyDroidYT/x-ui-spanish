@@ -3,7 +3,7 @@ Panel webui x-ray con soporte a multi-usuarios/protocolos
 
 # Características
 - Supervisión del estado del sistema
-- Visualizacion via web: multi-protocolos, multi-usuarios
+- Visualizacion via web
 - Compatibilidad con：vmess、vless、trojan、shadowsocks、dokodemo-door、socks、http
 - Soporte para configurar mas configuraciones de protocolos
 - Estadisticas de trafico, limitar trafico, cuentas con fecha de caducidad
