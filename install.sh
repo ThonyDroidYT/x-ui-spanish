@@ -123,20 +123,21 @@ install_x-ui() {
     cd /usr/local/
 
     if [ $# == 0 ]; then
-        last_version=$(curl -Ls "https://api.github.com/repos/vaxilu/x-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+        last_version=$(curl -Ls "https://api.github.com/repos/M1001-byte/x-ui-spanish/releases" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
         if [[ ! -n "$last_version" ]]; then
             echo -e "${red}No se pudo detectar la version de x-ui${plain}"
             exit 1
         fi
         echo -e "x-ui, la ultima version es ${green}${last_version}${plain}"
-        wget -N --no-check-certificate -O /usr/local/x-ui-linux-${arch}.tar.gz https://github.com/vaxilu/x-ui/releases/download/${last_version}/x-ui-linux-${arch}.tar.gz -q --show-progress
+        wget -N --no-check-certificate -O /usr/local/x-ui-linux-${arch}.tar.gz https://github.com/M1001-byte/x-ui-spanish/releases/download/${last_version}/x-ui-linux-${arch}-spanish.tar.gz -q --show-progress
         if [[ $? -ne 0 ]]; then
             echo -e "${red}Error al descargar x-ui${plain}"
             exit 1
         fi
     else
         last_version=$1
-        url="https://github.com/vaxilu/x-ui/releases/download/${last_version}/x-ui-linux-${arch}.tar.gz"
+        
+        url="https://github.com/M1001-byte/x-ui-spanish/releases/download/${last_version}/x-ui-linux-${arch}-spanish.tar.gz"
         echo -e "Empezar instalacion de x-ui"
         wget -N --no-check-certificate -O /usr/local/x-ui-linux-${arch}.tar.gz ${url} -q --show-progress
         if [[ $? -ne 0 ]]; then
@@ -154,7 +155,7 @@ install_x-ui() {
     cd x-ui
     chmod +x x-ui bin/xray-linux-${arch}
     cp -f x-ui.service /etc/systemd/system/
-    wget --no-check-certificate -O /usr/bin/x-ui https://raw.githubusercontent.com/vaxilu/x-ui/main/x-ui.sh -q --show-progress
+    wget --no-check-certificate -O /usr/bin/x-ui https://raw.githubusercontent.com/M1001-byte/x-ui-spanish/main/x-ui.sh -q --show-progress
     chmod +x /usr/local/x-ui/x-ui.sh
     chmod +x /usr/bin/x-ui
     config_after_install
