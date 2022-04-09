@@ -1,11 +1,12 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"x-ui/logger"
 	"x-ui/web/service"
 	"x-ui/web/session"
+
+	"github.com/gin-gonic/gin"
 )
 
 type LoginForm struct {
@@ -36,34 +37,34 @@ func (a *IndexController) index(c *gin.Context) {
 		c.Redirect(http.StatusTemporaryRedirect, "xui/")
 		return
 	}
-	html(c, "login.html", "登录", nil)
+	html(c, "login.html", "Iniciar Sesión", nil)
 }
 
 func (a *IndexController) login(c *gin.Context) {
 	var form LoginForm
 	err := c.ShouldBind(&form)
 	if err != nil {
-		pureJsonMsg(c, false, "数据格式错误")
+		pureJsonMsg(c, false, "Datos mal formados.")
 		return
 	}
 	if form.Username == "" {
-		pureJsonMsg(c, false, "请输入用户名")
+		pureJsonMsg(c, false, "Por favor,ingrese el nombre de usuario.")
 		return
 	}
 	if form.Password == "" {
-		pureJsonMsg(c, false, "请输入密码")
+		pureJsonMsg(c, false, "Por favor,ingrese la contraseña")
 		return
 	}
 	user := a.userService.CheckUser(form.Username, form.Password)
 	if user == nil {
 		logger.Infof("wrong username or password: \"%s\" \"%s\"", form.Username, form.Password)
-		pureJsonMsg(c, false, "用户名或密码错误")
+		pureJsonMsg(c, false, "Nombre de usuario o contraseña incorrectos.")
 		return
 	}
 
 	err = session.SetLoginUser(c, user)
 	logger.Info("user", user.Id, "login success")
-	jsonMsg(c, "登录", err)
+	jsonMsg(c, "Inicio de sesion ", err)
 }
 
 func (a *IndexController) logout(c *gin.Context) {

@@ -33,13 +33,13 @@ function safeBase64(str) {
 
 function formatSecond(second) {
     if (second < 60) {
-        return second.toFixed(0) + ' 秒';
+        return second.toFixed(0) + ' segundo';
     } else if (second < 3600) {
-        return (second / 60).toFixed(0) + ' 分钟';
+        return (second / 60).toFixed(0) + ' minuto';
     } else if (second < 3600 * 24) {
-        return (second / 3600).toFixed(0) + ' 小时';
+        return (second / 3600).toFixed(0) + ' Hora';
     } else {
-        return (second / 3600 / 24).toFixed(0) + ' 天';
+        return (second / 3600 / 24).toFixed(0) + ' Dia';
     }
 }
 

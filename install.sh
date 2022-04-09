@@ -4,11 +4,11 @@ red='\033[0;31m'
 green='\033[0;32m'
 yellow='\033[0;33m'
 plain='\033[0m'
-
+blue='\033[0;36m'
 cur_dir=$(pwd)
 
 # check root
-[[ $EUID -ne 0 ]] && echo -e "${red}错误：${plain} 必须使用root用户运行此脚本！\n" && exit 1
+[[ $EUID -ne 0 ]] && echo -e "${red}Error：${plain} El script debe ser ejecutado con permisos de superusuarios！\n" && exit 1
 
 # check os
 if [[ -f /etc/redhat-release ]]; then
@@ -26,7 +26,7 @@ elif cat /proc/version | grep -Eqi "ubuntu"; then
 elif cat /proc/version | grep -Eqi "centos|red hat|redhat"; then
     release="centos"
 else
-    echo -e "${red}未检测到系统版本，请联系脚本作者！${plain}\n" && exit 1
+    echo -e "${red}No se detecto la version del sistema！${plain}\n" && exit 1
 fi
 
 arch=$(arch)
@@ -37,13 +37,13 @@ elif [[ $arch == "aarch64" || $arch == "arm64" ]]; then
     arch="arm64"
 else
     arch="amd64"
-    echo -e "${red}检测架构失败，使用默认架构: ${arch}${plain}"
+    echo -e "${red}No se pudo detectar la arquitectura del cpu. Usando el valor por defecto: ${arch}${plain}"
 fi
 
-echo "架构: ${arch}"
+echo "Arquitectura CPU: ${arch}"
 
 if [ $(getconf WORD_BIT) != '32' ] && [ $(getconf LONG_BIT) != '64' ]; then
-    echo "本软件不支持 32 位系统(x86)，请使用 64 位系统(x86_64)，如果检测有误，请联系作者"
+    echo "Este software no es compatible con el sistema de 32 bits (x86), utilice el sistema de 64 bits (x86_64)."
     exit -1
 fi
 
@@ -59,15 +59,15 @@ fi
 
 if [[ x"${release}" == x"centos" ]]; then
     if [[ ${os_version} -le 6 ]]; then
-        echo -e "${red}请使用 CentOS 7 或更高版本的系统！${plain}\n" && exit 1
+        echo -e "${red}Utilice en Centos 7 o superior！${plain}\n" && exit 1
     fi
 elif [[ x"${release}" == x"ubuntu" ]]; then
     if [[ ${os_version} -lt 16 ]]; then
-        echo -e "${red}请使用 Ubuntu 16 或更高版本的系统！${plain}\n" && exit 1
+        echo -e "${red}Utilice en ubuntu 16 o superior！${plain}\n" && exit 1
     fi
 elif [[ x"${release}" == x"debian" ]]; then
     if [[ ${os_version} -lt 8 ]]; then
-        echo -e "${red}请使用 Debian 8 或更高版本的系统！${plain}\n" && exit 1
+        echo -e "${red}Utilice en debian 8 superior ！${plain}\n" && exit 1
     fi
 fi
 
@@ -80,25 +80,43 @@ install_base() {
 }
 
 #This function will be called when user installed x-ui out of sercurity
+show_usage() {
+    echo -e "Como utilizar el scipt de gestion x-ui: "
+    echo -e "------------------------------------------"
+    echo -e "${green}x-ui${plain}              - Mostrar el menu de gestion ( mas funciones )"
+    echo -e "${green}x-ui start${plain}        - Iniciar el panel x-ui"
+    echo -e "${green}x-ui stop${plain}         - Detener el panel x-ui"
+    echo -e "${green}x-ui restart${plain}      - Reiniciar el panel x-ui"
+    echo -e "${green}x-ui status${plain}       - Mostrar el estado del panel x-ui"
+    echo -e "${green}x-ui enable${plain}       - Habilitar el inicio automatico del panel x-ui"
+    echo -e "${green}x-ui disable${plain}      - Deshabilitar el inicio automatico del panel x-ui"
+    echo -e "${green}x-ui log${plain}          - Mostrar el log del panel x-ui"
+    echo -e "${green}x-ui v2-ui${plain}        - Migre los datos de la cuenta v2-ui de esta máquina a x-ui"
+    echo -e "${green}x-ui update${plain}       - Actualizar el panel x-ui"
+    echo -e "${green}x-ui install${plain}      - Instalar el panel x-ui"
+    echo -e "${green}x-ui uninstall${plain}    - Desinstalar el panel x-ui"
+    echo -e "------------------------------------------"
+}
 config_after_install() {
-    echo -e "${yellow}出于安全考虑，安装完成后需要强制修改端口与账户密码${plain}"
-    read -p "请设置您的账户名:" config_account
-    echo -e "${yellow}您的账户名将设定为:${config_account}${plain}"
-    read -p "请设置您的账户密码:" config_password
-    echo -e "${yellow}您的账户密码将设定为:${config_password}${plain}"
-    read -p "请设置面板访问端口:" config_port
-    echo -e "${yellow}您的面板访问端口将设定为:${config_port}${plain}"
-    read -p "确认设定完成？[y/n]": config_confirm
+    echo -e "${yellow}Antes de continuar, necesito hacerle algunas preguntas${plain}"
+    read -p "Nombre de cuenta:" config_account
+    echo -e "${yellow}Nombre de cuenta establecido a : ${green}${config_account}${plain}"
+    read -p "Por favor, establezca la contraseña de su cuenta: " config_password
+    echo -e "${yellow}Contraseña de la cuenta establecido a : ${green}${config_password}${plain}"
+    read -p "Puerto de escucha para el panel:" config_port
+    echo -e "${yellow}Puerto de acceso establecido a : ${green}${config_port}${plain}"
+    read -p "¿Estás seguro de que la configuración está completa?[y/n]": config_confirm
     if [[ x"${config_confirm}" == x"y" || x"${config_confirm}" == x"Y" ]]; then
-        echo -e "${yellow}确认设定,设定中${plain}"
-        /usr/local/x-ui/x-ui setting -username ${config_account} -password ${config_password}
-        echo -e "${yellow}账户密码设定完成${plain}"
-        /usr/local/x-ui/x-ui setting -port ${config_port}
-        echo -e "${yellow}面板端口设定完成${plain}"
+        echo -e "${yellow}Confirmar configuracion${plain}"
+        /usr/local/x-ui/x-ui setting -username ${config_account} -password ${config_password}&> /dev/null
+        echo -e "${yellow}Configuración de la contraseña de la cuenta completada${plain}"
+        /usr/local/x-ui/x-ui setting -port ${config_port}&> /dev/null
+        echo -e "${yellow}Configuración del puerto del panel completada${plain}"
     else
-        echo -e "${red}已取消,所有设置项均为默认设置,请及时修改${plain}"
+        echo -e "${red}Cancelado. Se establecio la configuracion por defecto.${plain}"
     fi
 }
+
 
 install_x-ui() {
     systemctl stop x-ui
@@ -107,22 +125,22 @@ install_x-ui() {
     if [ $# == 0 ]; then
         last_version=$(curl -Ls "https://api.github.com/repos/vaxilu/x-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
         if [[ ! -n "$last_version" ]]; then
-            echo -e "${red}检测 x-ui 版本失败，可能是超出 Github API 限制，请稍后再试，或手动指定 x-ui 版本安装${plain}"
+            echo -e "${red}No se pudo detectar la version de x-ui${plain}"
             exit 1
         fi
-        echo -e "检测到 x-ui 最新版本：${last_version}，开始安装"
-        wget -N --no-check-certificate -O /usr/local/x-ui-linux-${arch}.tar.gz https://github.com/vaxilu/x-ui/releases/download/${last_version}/x-ui-linux-${arch}.tar.gz
+        echo -e "x-ui, la ultima version es ${green}${last_version}${plain}"
+        wget -N --no-check-certificate -O /usr/local/x-ui-linux-${arch}.tar.gz https://github.com/vaxilu/x-ui/releases/download/${last_version}/x-ui-linux-${arch}.tar.gz -q --show-progress
         if [[ $? -ne 0 ]]; then
-            echo -e "${red}下载 x-ui 失败，请确保你的服务器能够下载 Github 的文件${plain}"
+            echo -e "${red}Error al descargar x-ui${plain}"
             exit 1
         fi
     else
         last_version=$1
         url="https://github.com/vaxilu/x-ui/releases/download/${last_version}/x-ui-linux-${arch}.tar.gz"
-        echo -e "开始安装 x-ui v$1"
-        wget -N --no-check-certificate -O /usr/local/x-ui-linux-${arch}.tar.gz ${url}
+        echo -e "Empezar instalacion de x-ui"
+        wget -N --no-check-certificate -O /usr/local/x-ui-linux-${arch}.tar.gz ${url} -q --show-progress
         if [[ $? -ne 0 ]]; then
-            echo -e "${red}下载 x-ui v$1 失败，请确保此版本存在${plain}"
+            echo -e "${red}La descarga de x-ui fallo.${plain}"
             exit 1
         fi
     fi
@@ -131,12 +149,12 @@ install_x-ui() {
         rm /usr/local/x-ui/ -rf
     fi
 
-    tar zxvf x-ui-linux-${arch}.tar.gz
+    tar zxvf x-ui-linux-${arch}.tar.gz &>/dev/null
     rm x-ui-linux-${arch}.tar.gz -f
     cd x-ui
     chmod +x x-ui bin/xray-linux-${arch}
     cp -f x-ui.service /etc/systemd/system/
-    wget --no-check-certificate -O /usr/bin/x-ui https://raw.githubusercontent.com/vaxilu/x-ui/main/x-ui.sh
+    wget --no-check-certificate -O /usr/bin/x-ui https://raw.githubusercontent.com/vaxilu/x-ui/main/x-ui.sh -q --show-progress
     chmod +x /usr/local/x-ui/x-ui.sh
     chmod +x /usr/bin/x-ui
     config_after_install
@@ -149,25 +167,10 @@ install_x-ui() {
     systemctl daemon-reload
     systemctl enable x-ui
     systemctl start x-ui
-    echo -e "${green}x-ui v${last_version}${plain} 安装完成，面板已启动，"
-    echo -e ""
-    echo -e "x-ui 管理脚本使用方法: "
-    echo -e "----------------------------------------------"
-    echo -e "x-ui              - 显示管理菜单 (功能更多)"
-    echo -e "x-ui start        - 启动 x-ui 面板"
-    echo -e "x-ui stop         - 停止 x-ui 面板"
-    echo -e "x-ui restart      - 重启 x-ui 面板"
-    echo -e "x-ui status       - 查看 x-ui 状态"
-    echo -e "x-ui enable       - 设置 x-ui 开机自启"
-    echo -e "x-ui disable      - 取消 x-ui 开机自启"
-    echo -e "x-ui log          - 查看 x-ui 日志"
-    echo -e "x-ui v2-ui        - 迁移本机器的 v2-ui 账号数据至 x-ui"
-    echo -e "x-ui update       - 更新 x-ui 面板"
-    echo -e "x-ui install      - 安装 x-ui 面板"
-    echo -e "x-ui uninstall    - 卸载 x-ui 面板"
-    echo -e "----------------------------------------------"
+    echo -e "${green}x-ui ${last_version}${plain}, instalado correctamente"
+    show_usage
 }
 
-echo -e "${green}开始安装${plain}"
+echo -e "${green}Comenzando instalacion${plain}"
 install_base
 install_x-ui $1

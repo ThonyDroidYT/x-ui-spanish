@@ -2,11 +2,12 @@ package controller
 
 import (
 	"errors"
-	"github.com/gin-gonic/gin"
 	"time"
 	"x-ui/web/entity"
 	"x-ui/web/service"
 	"x-ui/web/session"
+
+	"github.com/gin-gonic/gin"
 )
 
 type updateUserForm struct {
@@ -40,7 +41,7 @@ func (a *SettingController) initRouter(g *gin.RouterGroup) {
 func (a *SettingController) getAllSetting(c *gin.Context) {
 	allSetting, err := a.settingService.GetAllSetting()
 	if err != nil {
-		jsonMsg(c, "获取设置", err)
+		jsonMsg(c, "Ver ajustes", err)
 		return
 	}
 	jsonObj(c, allSetting, nil)
@@ -50,27 +51,27 @@ func (a *SettingController) updateSetting(c *gin.Context) {
 	allSetting := &entity.AllSetting{}
 	err := c.ShouldBind(allSetting)
 	if err != nil {
-		jsonMsg(c, "修改设置", err)
+		jsonMsg(c, "Modificar ajustes", err)
 		return
 	}
 	err = a.settingService.UpdateAllSetting(allSetting)
-	jsonMsg(c, "修改设置", err)
+	jsonMsg(c, "Modificar ajustes", err)
 }
 
 func (a *SettingController) updateUser(c *gin.Context) {
 	form := &updateUserForm{}
 	err := c.ShouldBind(form)
 	if err != nil {
-		jsonMsg(c, "修改用户", err)
+		jsonMsg(c, "Modificar usuario", err)
 		return
 	}
 	user := session.GetLoginUser(c)
 	if user.Username != form.OldUsername || user.Password != form.OldPassword {
-		jsonMsg(c, "修改用户", errors.New("原用户名或原密码错误"))
+		jsonMsg(c, "Modificar usuario", errors.New("el nombre de usuario/contraseña original son incorrectos"))
 		return
 	}
 	if form.NewUsername == "" || form.NewPassword == "" {
-		jsonMsg(c, "修改用户", errors.New("新用户名和新密码不能为空"))
+		jsonMsg(c, "Modificar usuario", errors.New("el nuevo nombre de usurio/contraseña no pueden estar vacío"))
 		return
 	}
 	err = a.userService.UpdateUser(user.Id, form.NewUsername, form.NewPassword)
@@ -79,10 +80,10 @@ func (a *SettingController) updateUser(c *gin.Context) {
 		user.Password = form.NewPassword
 		session.SetLoginUser(c, user)
 	}
-	jsonMsg(c, "修改用户", err)
+	jsonMsg(c, "Modificar usuario", err)
 }
 
 func (a *SettingController) restartPanel(c *gin.Context) {
 	err := a.panelService.RestartPanel(time.Second * 3)
-	jsonMsg(c, "重启面板", err)
+	jsonMsg(c, "Reinicar Panel", err)
 }

@@ -2,12 +2,13 @@ package service
 
 import (
 	"fmt"
-	"gorm.io/gorm"
 	"time"
 	"x-ui/database"
 	"x-ui/database/model"
 	"x-ui/util/common"
 	"x-ui/xray"
+
+	"gorm.io/gorm"
 )
 
 type InboundService struct {
@@ -53,7 +54,7 @@ func (s *InboundService) AddInbound(inbound *model.Inbound) error {
 		return err
 	}
 	if exist {
-		return common.NewError("端口已存在:", inbound.Port)
+		return common.NewError("El puerto ya esta en uso:", inbound.Port)
 	}
 	db := database.GetDB()
 	return db.Save(inbound).Error
@@ -66,7 +67,7 @@ func (s *InboundService) AddInbounds(inbounds []*model.Inbound) error {
 			return err
 		}
 		if exist {
-			return common.NewError("端口已存在:", inbound.Port)
+			return common.NewError("El puerto ya esta en uso:", inbound.Port)
 		}
 	}
 
@@ -112,7 +113,7 @@ func (s *InboundService) UpdateInbound(inbound *model.Inbound) error {
 		return err
 	}
 	if exist {
-		return common.NewError("端口已存在:", inbound.Port)
+		return common.NewError("El puerto ya esta en uso:", inbound.Port)
 	}
 
 	oldInbound, err := s.GetInbound(inbound.Id)

@@ -1,15 +1,15 @@
 {{define "menuItems"}}
 <a-menu-item key="{{ .base_path }}xui/">
     <a-icon type="dashboard"></a-icon>
-    <span>系统状态</span>
+    <span>Estado del sistema</span>
 </a-menu-item>
 <a-menu-item key="{{ .base_path }}xui/inbounds">
     <a-icon type="user"></a-icon>
-    <span>入站列表</span>
+    <span>Lista de usuarios </span>
 </a-menu-item>
 <a-menu-item key="{{ .base_path }}xui/setting">
     <a-icon type="setting"></a-icon>
-    <span>面板设置</span>
+    <span>Configuracion</span>
 </a-menu-item>
 <!--<a-menu-item key="{{ .base_path }}xui/clients">-->
 <!--    <a-icon type="laptop"></a-icon>-->
@@ -18,16 +18,20 @@
 <a-sub-menu>
     <template slot="title">
         <a-icon type="link"></a-icon>
-        <span>其他</span>
+        <span>Otros</span>
     </template>
     <a-menu-item key="https://github.com/vaxilu/x-ui/">
         <a-icon type="github"></a-icon>
-        <span>Github</span>
+        <span>github (original)</span>
+    </a-menu-item>
+    <a-menu-item key="https://github.com/M1001-byte/">
+        <a-icon type="github"></a-icon>
+        <span>github (spanish)</span>
     </a-menu-item>
 </a-sub-menu>
 <a-menu-item key="{{ .base_path }}logout">
     <a-icon type="logout"></a-icon>
-    <span>退出登录</span>
+    <span>Cerrar Sesion</span>
 </a-menu-item>
 {{end}}
 
@@ -43,7 +47,7 @@
           @close="siderDrawer.close()"
           :visible="siderDrawer.visible" :wrap-style="{ padding: 0 }">
     <div class="drawer-handle" @click="siderDrawer.change()" slot="handle">
-        <a-icon :type="siderDrawer.visible ? 'close' : 'menu-fold'"></a-icon>
+        <a-icon :type="siderDrawer.visible ? 'Cerrar' : 'menu-fold'"></a-icon>
     </div>
     <a-menu theme="light" mode="inline" :selected-keys="['{{ .request_uri }}']"
         @click="({key}) => key.startsWith('http') ? window.open(key) : location.href = key">
