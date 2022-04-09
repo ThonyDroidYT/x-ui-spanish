@@ -8,7 +8,7 @@ Panel webui x-ray con soporte a multi-usuarios/protocolos
 - Soporte para configurar mas configuraciones de protocolos
 - Estadisticas de trafico, limitar trafico, cuentas con fecha de caducidad
 - Plantillas de configuracion de x-ray personalizables
-- Panel de acceso con encriptacion SSL/TLS ( nombre de dominio + certificado ssl )
+- Panel de acceso con encriptacion SSL/TLS ( nombre de dominio + certificado ssl)
 - Consule el panel,para ver mas configuraciones
 
 # instalar y actualizar
