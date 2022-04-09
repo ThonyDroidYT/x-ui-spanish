@@ -17,7 +17,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/M1001-byte/x-ui-spanish/main/i
 ```
 
 ## Instalacion y actualizacion manual
-1. Descargue el ultimo binario de https://github.com/vaxilu/x-ui/releases (Seleccione la arquitectura de su cpu)
+1. Descargue el ultimo binario de https://github.com/M1001-byte/x-ui-spanish/releases (Seleccione la arquitectura de su cpu)
 2. A continuación, descargue el paquete comprimido en el directorio /root/ del servidor vps e inicie sesión como usuario root.
 
 > Reemplaze `amd64` de acuerdo a la arquitectura de su cpu.
