@@ -402,7 +402,7 @@ show_xray_status() {
 ssl_cert_issue() {
     echo -E ""
     LOGD "******Instrucciones de uso******"
-    LOGI "Este script utilizará el script Acme para solicitar un certificado y debe asegurarse de que:"
+    LOGI "Este script utilizará  Acme para solicitar un certificado y debe asegurarse de que:"
     LOGI "1.Conozca el correo electrónico registrado en Cloudflare"
     LOGI "2.Conozca la clave API global de Cloudflare"
     LOGI "3.El nombre de dominio se ha resuelto en el servidor actual a través de Cloudflare"
