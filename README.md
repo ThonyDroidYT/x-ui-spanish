@@ -1,4 +1,5 @@
 # x-ui
+**La traducción no es %100 precisa.**
 Panel webui x-ray con soporte a multi-usuarios/protocolos
 
 # Características
